@@ -39,16 +39,143 @@ my_data_clean <- personal_data |>
 
 # Creating visualizations!
 
-## Visualization 1: Jitter plot
+## Visualization 1: Jitter plot showing relationship between water intake and temperature that day
 
 ```{r}
+
+# base layer ggplot with my_data_clean data frame
+ggplot(data = my_data_clean,
+       # x axis is temperature (hot, warm, or cold)
+      mapping = aes(x = temperature_h_w_c,
+           # y axis is water intake in liters
+           y = water_intake_l,
+           # color by temperature
+           color = temperature_h_w_c)) +
+  # first layer jitter to show individual data points
+  geom_jitter(width = 0.15, # controlling horizontal spread
+              height = 0, # controlling vertical spread
+              size = 3, # making the dots easy to see
+              alpha = 0.7) + # slight transparency of dots
+  # adding in the mean point to make it easier to read
+  stat_summary(fun = mean,
+               # point to represent mean
+               geom = "point",
+               # mean point size bigger than individual point size
+               size = 5,
+               # making mean points black so they can easily be distinguished
+               color = "black") +
+  # manually setting colors for temperature
+  scale_color_manual(values = c(
+    # hot is a red color because duh
+    "Hot" = "tomato2",
+    # warm is a golden color because it is warm but not too... hot
+    "Warm" = "goldenrod2",
+    # cold is a blue color because duh
+    "Cold" = "steelblue3"
+  )) +
+  # setting title, subtitle, and axes titles
+  labs(
+    # title described the two variables being related
+    title = "Water intake varied with temperature experience",
+    # decided to throw in a subtitle talking about what is seen in the plot
+    subtitle = "Hotter days were generally associated with greater hydration",
+    # x axis is temperature experience 
+    x = "Temperature experience",
+    # y axis is water intake in liters
+    y = "Water intake (L)"
+  ) +
+  # cute little theme 
+  theme_classic(base_size = 14) + # base size 14 so components can easily be read
+  # removing legend because i do not find it to be necessary here
+  theme(legend.position = "none")
 
 ```
 
 
-## Visualization 2: Calendar heatmap
+## Visualization 2: Bubble plot -- daily steps, water intake, shift duration, and illness
 
 ```{r}
+
+# creating new object bubble data out of my_data_clean data frame for bubble plot
+bubble_data <- my_data_clean |>
+  # using filter function to get tell r to ignore n/a values for following variables so that if anything is missing there will be no issue
+  filter(
+    !is.na(steps), # ignore n/a for steps
+    !is.na(water_intake_l), # ignore n/a for water intake
+    !is.na(duration_of_shift_hrs), # ignore n/a for duration of shift
+    !is.na(sick_y_n) # ignore n/a for sick
+  )
+
+```
+
+
+```{r}
+
+# further editing bubble_data data frame because first draft of graph looked messy
+bubble_data <- bubble_data |>
+  # using mutate function to 
+   mutate(
+     # removes commas from steps column and converts to numercial format rather than character 
+    steps = as.numeric(gsub(",", "", steps)),
+    # creating new variable where steps are /1000 to make x axis cleaner in plot
+    steps_k = steps / 1000
+  )
+  
+# base layer ggplot with data frame bubble_data
+ggplot(data = bubble_data,
+       # aes to set axes
+       mapping = aes(x = steps, # x axis is daily steps
+           y = water_intake_l, # y axis is water intake in liters
+           size = duration_of_shift_hrs, # size of bubbles changes by the duration of my shift in hours
+           fill = sick_y_n)) + # color is filled by whether or not i am sick
+  # first layer geom_point to show individual data 
+  geom_point(
+    # shape is style 21, which is a filled circle with a colored border, or in this case...
+    shape = 21,
+    # ...border is white so it looks cool when they overlap!
+    color = "white",
+    # make the points see through so you can see if there are any overlapping
+    alpha = 0.75,
+    # controls thickness of border around data points
+    stroke = 1
+  ) +
+  # custom colors
+  scale_fill_manual(values = c(
+    # yes i have a sinus infection = red
+    "Y" = "firebrick2",
+    # no i do not have a sinus infection = blue
+    "N" = "steelblue3"
+  )) +
+  # customizing bubble size scale
+  scale_size_continuous(
+    # controls minimum and maximum bubble sizes so smaller values result in smaller circles
+    range = c(4, 12),
+    # specifies which shift duration values should appear in bubble size legend
+    breaks = c(2, 4, 6, 8)
+  ) +
+  # setting titles
+  labs(
+    # title states a general idea taken from the plot
+    title = "More demanding days required more hydration",
+    # subtitle informs reader what bubble size represents more clearly
+    subtitle = "Bubble size represents work shift duration",
+    # x axis is daily steps measured in thousands of steps
+    x = "Daily steps (thousands)",
+    # y axis is water intake measured in liters
+    y = "Water intake (L)",
+    # label to explain that color based on whether or not i had a sinus infection :P
+    fill = "Sinus infection",
+    # label to explain that size of bubble is based on shift duration with legend
+    size = "Shift duration (hrs)"
+  ) +
+  # nice theme with base size 14 for easy readibility
+  theme_classic(base_size = 14) +
+  # had to add this in because my legend bubbles kept DISAPPEARING 
+  guides(
+    # shape 21 for legend bubbles as well
+  size = guide_legend(override.aes = list(shape = 21,
+                                          fill = "grey70")) # fill with grey
+)
 
 ```
 
