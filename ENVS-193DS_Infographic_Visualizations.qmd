@@ -39,7 +39,7 @@ my_data_clean <- personal_data |>
 
 # Creating visualizations!
 
-## Visualization 1: Jitter plot showing relationship between water intake and temperature that day
+## Visualization 1: Jitter plot -- relationship between water intake and temperature that day
 
 ```{r}
 
@@ -142,7 +142,7 @@ ggplot(data = bubble_data,
   # custom colors
   scale_fill_manual(values = c(
     # yes i have a sinus infection = red
-    "Y" = "firebrick2",
+    "Y" = "tomato2",
     # no i do not have a sinus infection = blue
     "N" = "steelblue3"
   )) +
@@ -180,9 +180,41 @@ ggplot(data = bubble_data,
 ```
 
 
-## Visualization 3: Ridgeline plot
+## Visualization 3: Ridgeline plot -- showing how much water I drink when I have a sinus infection vs do not have a sinus infection
 
 ```{r}
+
+# base layer ggplot using my_data_clean data frame
+ggplot(data = my_data_clean,
+       # setting x and y axes
+       mapping = aes(x = water_intake_l, # x axis water intake in liters
+           y = sick_y_n, # y axis sick yes or no 
+           fill = sick_y_n)) + # fill color by sick yes or no
+  # first layer setting ridgeline densities
+  geom_density_ridges(
+    alpha = 0.7, # making them a little transparent
+    color = "white" # creates white border around each ridgeline 
+  ) +
+  # adding custom colors using scale_fill_manual
+  scale_fill_manual(values = c(
+    "Y" = "tomato2", # yes sick is red because this color gives sinus infection
+    "N" = "skyblue3" # no not sick is blue because this color makes me feel calm, like i do when i do not have a sinus infection
+  )) +
+  # labeling title, subtitle, and axes
+  labs(
+    # title is general finding from the figure
+    title = "Hydration patterns shifted ruring illness",
+    # subtitle describes the variables being examined in this plot
+    subtitle = "Distribution of daily water intake on sick and healthy days",
+    # x axis is water intake in liters
+    x = "Water intake (L)",
+    # y axis is whether or not i have a sinus infection on the day the data is being collected
+    y = "Sinus infection"
+  ) +
+  # setting a nice, classic theme that matches other plots with base size 14 for readibility
+  theme_classic(base_size = 14) +
+  # removing legend, i do not find it to be necessary
+  theme(legend.position = "none")
 
 ```
 
