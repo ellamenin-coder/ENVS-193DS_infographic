@@ -190,6 +190,11 @@ ggplot(data = bubble_data,
     # shape 21 for legend bubbles as well
   size = guide_legend(override.aes = list(shape = 21,
                                           fill = "grey70")) # fill with grey
+) +
+  # using theme to adjust legend because it kept running into subtitle
+ theme(
+  legend.position = "right", # manually making sure legend is all the way to the right
+  legend.margin = margin(t = 10) # legend margin t = 10 to give for some breathing room around the legend
 )
 
 ```
