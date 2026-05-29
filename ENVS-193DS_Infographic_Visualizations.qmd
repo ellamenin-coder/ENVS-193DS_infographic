@@ -1,7 +1,13 @@
 ---
 title: "ENVS-193DS_Infographic_Visualizations"
 author: "Ella Menin"
-format: pdf
+date: "2026-05-28"
+format:
+  pdf:
+    toc: true # use this to display a table of contents
+execute:
+  message: false # use this to make sure messages don't show up
+  warning: false # use this to make sure warnings don't show up
 ---
 
 # Setting up
@@ -13,12 +19,16 @@ format: pdf
 library(ggridges)
 # reading in package: dplyr
 library(dplyr)
+# reading in package: janitor
 library(janitor)
+# reading in package: ggplot2
+library(ggplot2)
 ```
 
 ```{r}
 #| label: reading-in-personal-data
 
+# creating object personal_data from reading in personal data file
 personal_data <- read.csv("data/personal_data.csv")
 
 ```
@@ -26,13 +36,18 @@ personal_data <- read.csv("data/personal_data.csv")
 ```{r}
 #| label: cleaning-data
 
-# 
+# creating new object my_data_clean from personal_data data frame
 my_data_clean <- personal_data |> 
+  # using janitor to clean names (underscores and all lowercase)
   janitor::clean_names() |> 
-  filter(!is.na(temperature_h_w_c),
-         temperature_h_w_c != "") |> 
+  # using filter removing certain rows 
+  filter(!is.na(temperature_h_w_c), # removes rows where temperature is n/a
+         temperature_h_w_c != "") |> # removes rows where temperature is an empty string
+  # mutating temperature variable to change levels, influences the order in which they will appear in a plot
   mutate(temperature_h_w_c = factor(temperature_h_w_c,
+                                    # levels go hot -> warm -> cold
                                     levels = c("H", "W", "C"),
+                                    # changing from letters to whole words (easier to understand in plot)
                                     labels = c("Hot", "Warm", "Cold")))
   
 ```
