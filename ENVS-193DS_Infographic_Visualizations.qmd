@@ -1,0 +1,61 @@
+---
+title: "ENVS-193DS_Infographic_Visualizations"
+author: "Ella Menin"
+format: pdf
+---
+
+# Setting up
+
+```{r}
+#| label: reading-in-packages
+
+# reading in package: ggridges
+library(ggridges)
+# reading in package: dplyr
+library(dplyr)
+library(janitor)
+```
+
+```{r}
+#| label: reading-in-personal-data
+
+personal_data <- read.csv("data/personal_data.csv")
+
+```
+
+```{r}
+#| label: cleaning-data
+
+# 
+my_data_clean <- personal_data |> 
+  janitor::clean_names() |> 
+  filter(!is.na(temperature_h_w_c),
+         temperature_h_w_c != "") |> 
+  mutate(temperature_h_w_c = factor(temperature_h_w_c,
+                                    levels = c("H", "W", "C"),
+                                    labels = c("Hot", "Warm", "Cold")))
+  
+```
+
+# Creating visualizations!
+
+## Visualization 1: Jitter plot
+
+```{r}
+
+```
+
+
+## Visualization 2: Calendar heatmap
+
+```{r}
+
+```
+
+
+## Visualization 3: Ridgeline plot
+
+```{r}
+
+```
+
