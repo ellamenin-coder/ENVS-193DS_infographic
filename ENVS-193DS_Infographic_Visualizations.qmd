@@ -5,9 +5,12 @@ date: "2026-05-28"
 format:
   pdf:
     toc: true # use this to display a table of contents
-execute:
-  message: false # use this to make sure messages don't show up
-  warning: false # use this to make sure warnings don't show up
+    include-in-header:
+      text: |
+        \usepackage{fvextra}
+        \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,breakanywhere,commandchars=\\\{\}}
+        \RecustomVerbatimEnvironment{verbatim}{Verbatim}{breaklines,breakanywhere}
+editor: source
 ---
 
 # Setting up
@@ -23,7 +26,20 @@ library(dplyr)
 library(janitor)
 # reading in package: ggplot2
 library(ggplot2)
+# reading in package: fontawesome
+library(fontawesome)
+# reading in package: showtext
+library(showtext)
 ```
+
+```{r}
+#| label: preparing-font
+
+font_add_google("Poppins", "poppins")
+showtext_auto()
+
+```
+
 
 ```{r}
 #| label: reading-in-personal-data
@@ -89,18 +105,54 @@ ggplot(data = my_data_clean,
     "Cold" = "steelblue3"
   )) +
   # setting title, subtitle, and axes titles
-  labs(
-    # title described the two variables being related
-    title = "Water intake varied with temperature experience",
-    # decided to throw in a subtitle talking about what is seen in the plot
-    subtitle = "Hotter days were generally associated with greater hydration",
-    # x axis is temperature experience 
-    x = "Temperature experience",
-    # y axis is water intake in liters
-    y = "Water intake (L)"
+labs(
+  # title explains what is happening in figure
+  title = "Water intake varied with temperature experience",
+  # subtitle provides a conclusion from the figure
+  subtitle = "Hotter days were generally associated with greater hydration",
+  # setting x axis title: temperature experience
+  x = "Temperature experience",
+  # setting y axis title: water intake
+  y = "Water intake (L)"
+) +
+    # adding annotation to point out that hot days had highest average intake
+annotate(
+  "text",
+  # placement: text 1.45 along x axis
+  x = 1.45,
+  # placement: text 3.4 along y axis
+  y = 3.4,
+  # labeling arrow with sentence break for aesthetics
+  label = "Highest\naverage intake",
+  # cute consistent font
+  family = "poppins"
+) +
+# adding the arrow pointing to highest average intake
+geom_curve(
+  # placement (where curve starts): arrow 1.3 along x axis
+  x = 1.3,
+  # placement (where curve starts): arrow 3.15 along y axis
+  y = 3.15,
+  # placement (where curve ends): arrow 1.08 along x axis
+  xend = 1.08,
+  # placement (where curve ends): arrow 2.95 along y axis
+  yend = 2.95,
+  # curvature is 0.25
+  curvature = 0.25,
+  # creating arrow and how big it is
+  arrow = arrow(length = unit(0.3, "cm")),
+  # setting color back for readability
+  color = "black",
+  # line width of arrow
+  linewidth = 0.6
+) +
+  # base size 14 for easy readability 
+  theme_classic(base_size = 14) +
+  # adding the cutest custom font ever from showtext
+  theme(
+    text = element_text(family = "poppins")
   ) +
-  # cute little theme 
-  theme_classic(base_size = 14) + # base size 14 so components can easily be read
+
   # removing legend because i do not find it to be necessary here
   theme(legend.position = "none")
 
@@ -185,6 +237,10 @@ ggplot(data = bubble_data,
   ) +
   # nice theme with base size 14 for easy readibility
   theme_classic(base_size = 14) +
+  # adding the cutest custom font ever from showtext
+  theme(
+    text = element_text(family = "poppins")
+  ) +
   # had to add this in because my legend bubbles kept DISAPPEARING 
   guides(
     # shape 21 for legend bubbles as well
@@ -233,61 +289,80 @@ ggplot(data = my_data_clean,
   ) +
   # setting a nice, classic theme that matches other plots with base size 14 for readability
   theme_classic(base_size = 14) +
+  # adding cutest custom font ever from showtext package
+  theme(
+    text = element_text(family = "poppins")
+  ) +
   # removing legend, i do not find it to be necessary
   theme(legend.position = "none")
 
 ```
 
-## **Bonus:** Visualization 4: Pie chart -- showing how many days I had a sinus infection for fun 
+## Bonus: Visualization 4: Pie chart -- showing how many days I had a sinus infection for fun 
 
 Note: I was honestly shocked at how having a sinus infection greatly affected the amount of water I drink compared to some of the other variables. I think emphasizing this in the infographic would be a fun and personal way to integrate this important variable into my statistical story. 
 
 ```{r}
 
+# creating new data frame sick_counts from my_data_clean
 sick_counts <- my_data_clean |>
-  
+  # creating counts of how many observations were taken when i was sick verus not
   count(sick_y_n)
 
 ```
 
 ```{r}
 
-# base layer ggplot using sick_counts data frame
+# base layer ggplot with sick_counts data frame
 ggplot(data = sick_counts,
        # using aes to set axes
        mapping = aes(x = "", # creates single stacked bar for pie chart
-           y = n, # using column count for slice sizes in our pie
-           fill = sick_y_n)) + # fill color based on whether or not i was sick
+                     y = n, # using column count for slice sizes in our pie
+                     fill = sick_y_n)) + # fill color based on whether or not i was sick
+  
   # first layer geom_col which makes a bar chart --> pie chart
   geom_col(width = 1, # width 1 makes bars full width for pie chart
            color = "white") + # color white adds the white border between the pie slices as seen around the red slice
+  
   # transforms bar chart into circle
   coord_polar(theta = "y") + # mapping y values into angles
+  
   # custom coloring
-  scale_fill_manual(values = c(
-    # yes, sinus infection is red
-    "Y" = "tomato2",
-    # no, no sinus infection is blue
-    "N" = "skyblue2"
-  ),
-    # setting legend labels 
+  scale_fill_manual(
+    values = c(
+      # yes, sinus infection is red
+      "Y" = "tomato2",
+      # no, no sinus infection is blue
+      "N" = "skyblue2"
+    ),
+    
+    # setting legend labels
     labels = c(
-    # "Y" becomes "Yes" so readers can better understand legend
-    "Y" = "Yes",
-    # "N" becomes "No" so readers can better understand legend
-    "N" = "No"
-  )) +
+      # "Y" becomes "Yes" so readers can better understand legend
+      "Y" = "Yes",
+      # "N" becomes "No" so readers can better understand legend
+      "N" = "No"
+    )
+  ) +
+  
   # using labs to set some titles
   labs(
     # title explains what the pie chart is about
     title = "How often illness appeared in daily life",
+    
     # subtitle explains how this pie chart conveys proportion of days with and without sickness
     subtitle = "Proportion of days with and without a sinus infection",
-    # colors filled by sickness, legend title is "sinus infection?" 
+    
+    # colors filled by sickness, legend title is "sinus infection?"
     fill = "Sinus infection?"
   ) +
-  # theme void because it gets rid of basically all background elements, base size 14 for easy readability
+  
+  # theme void because it gets rid of basically all background elements,
+  # base size 14 for easy readability
   theme_void(base_size = 14)
 
 ```
 
+# Write-up: Part 4
+
+(Not part of required check-in, which is at the end of part 3)
