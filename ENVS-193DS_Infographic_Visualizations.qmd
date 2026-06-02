@@ -312,6 +312,29 @@ sick_counts <- my_data_clean |>
 ```
 
 ```{r}
+#| label: making-sick-counts-percentages
+
+# editing sick_counts data frame
+sick_counts <- sick_counts |>
+  # mutating sick_counts data frame to include percentages
+  mutate(
+    # computing proportions 
+    percent = n / sum(n),
+    # label for sick
+    label = ifelse(
+      # if row has "Y", it is labeled as being sick
+      sick_y_n == "Y",
+      # setting handy labels with the percentages to show if i am sick: sick (true condition)
+      paste0(scales::percent(percent, accuracy = 1), "\nSick"),
+      # setting handy labels with percentages to show if i am sick: not sick (false condition)
+      paste0(scales::percent(percent, accuracy = 1), "\nNot sick")
+    )
+  )
+
+```
+
+
+```{r}
 
 # base layer ggplot with sick_counts data frame
 ggplot(data = sick_counts,
@@ -319,14 +342,25 @@ ggplot(data = sick_counts,
        mapping = aes(x = "", # creates single stacked bar for pie chart
                      y = n, # using column count for slice sizes in our pie
                      fill = sick_y_n)) + # fill color based on whether or not i was sick
-  
+
   # first layer geom_col which makes a bar chart --> pie chart
   geom_col(width = 1, # width 1 makes bars full width for pie chart
            color = "white") + # color white adds the white border between the pie slices as seen around the red slice
-  
+
+  # adding percentage labels directly to pie slices
+  geom_text(
+    aes(label = label),
+    position = position_stack(vjust = 0.5), # centers labels within slices
+    color = "white", # white text stands out against slice colors
+     size = 5,
+  lineheight = 0.9,
+  family = "poppins",
+  fontface = "bold"
+) + 
+
   # transforms bar chart into circle
   coord_polar(theta = "y") + # mapping y values into angles
-  
+
   # custom coloring
   scale_fill_manual(
     values = c(
@@ -335,7 +369,7 @@ ggplot(data = sick_counts,
       # no, no sinus infection is blue
       "N" = "skyblue2"
     ),
-    
+
     # setting legend labels
     labels = c(
       # "Y" becomes "Yes" so readers can better understand legend
@@ -344,22 +378,16 @@ ggplot(data = sick_counts,
       "N" = "No"
     )
   ) +
-  
-  # using labs to set some titles
-  labs(
-    # title explains what the pie chart is about
-    title = "How often illness appeared in daily life",
-    
-    # subtitle explains how this pie chart conveys proportion of days with and without sickness
-    subtitle = "Proportion of days with and without a sinus infection",
-    
-    # colors filled by sickness, legend title is "sinus infection?"
-    fill = "Sinus infection?"
-  ) +
-  
+
   # theme void because it gets rid of basically all background elements,
   # base size 14 for easy readability
-  theme_void(base_size = 14)
+  theme_void(base_size = 14) +
+
+  # adding custom font and removing legend for infographic style
+  theme(
+    text = element_text(family = "poppins"),
+    legend.position = "none"
+  )
 
 ```
 
