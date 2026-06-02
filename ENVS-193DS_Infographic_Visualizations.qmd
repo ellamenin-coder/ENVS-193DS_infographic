@@ -279,7 +279,7 @@ ggplot(data = my_data_clean,
   # labeling title, subtitle, and axes
   labs(
     # title is general finding from the figure
-    title = "Hydration patterns shifted ruring illness",
+    title = "Hydration patterns shifted during illness",
     # subtitle describes the variables being examined in this plot
     subtitle = "Distribution of daily water intake on sick and healthy days",
     # x axis is water intake in liters
