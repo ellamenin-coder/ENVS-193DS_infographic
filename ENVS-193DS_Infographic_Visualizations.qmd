@@ -158,6 +158,14 @@ geom_curve(
 
 ```
 
+```{r}
+#| label: saving-jitterplot-png
+
+# code to save jitterplot as a png with specified dimensions
+ggsave("jitterplot.png", width = 8, height = 6, dpi = 300)
+
+```
+
 
 ## Visualization 2: Bubble plot -- daily steps, water intake, shift duration, and illness
 
@@ -255,6 +263,14 @@ ggplot(data = bubble_data,
 
 ```
 
+```{r}
+#| label: saving-bubble-plot
+
+# code to save image bubbleplot as a png with specified dimensions
+ggsave("bubbleplot.png", width = 8, height = 6, dpi = 300)
+
+```
+
 
 ## Visualization 3: Ridgeline plot -- showing how much water I drink when I have a sinus infection vs do not have a sinus infection
 
@@ -297,6 +313,15 @@ ggplot(data = my_data_clean,
   theme(legend.position = "none")
 
 ```
+
+```{r}
+#| label: saving-ridgeline-plot
+
+# code to save ridgeline plot as png with specified dimensions
+ggsave("ridgelineplot.png", width = 8, height = 6, dpi = 300)
+
+```
+
 
 ## Bonus: Visualization 4: Pie chart -- showing how many days I had a sinus infection for fun 
 
@@ -390,6 +415,15 @@ ggplot(data = sick_counts,
   )
 
 ```
+
+```{r}
+#| label: saving-pie-chart
+
+# code to save pie chart as png with specified dimensions
+ggsave("piechart.png", width = 8, height = 6, dpi = 300)
+
+```
+
 
 # Write-up: Part 4
 
