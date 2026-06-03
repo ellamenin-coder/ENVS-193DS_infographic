@@ -31,6 +31,8 @@ library(ggplot2)
 library(fontawesome)
 # reading in package: showtext
 library(showtext)
+# reading in package: here
+library(here)
 ```
 
 ```{r}
@@ -46,7 +48,7 @@ showtext_auto()
 #| label: reading-in-personal-data
 
 # creating object personal_data from reading in personal data file
-personal_data <- read.csv("data/personal_data.csv")
+personal_data <- read.csv(here("data", "personal_data.csv"))
 
 ```
 
