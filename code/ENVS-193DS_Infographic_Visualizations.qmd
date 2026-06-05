@@ -1,5 +1,5 @@
 ---
-title: "ENVS-193DS_Infographic_Visualizations"
+title: "ENVS-193DS Infographic Visualizations"
 author: "Ella Menin"
 date: "2026-05-28"
 format:
