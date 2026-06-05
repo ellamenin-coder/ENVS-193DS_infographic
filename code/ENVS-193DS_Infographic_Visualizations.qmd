@@ -163,7 +163,7 @@ geom_curve(
 #| label: saving-jitterplot-png
 
 # code to save jitterplot as a png with specified dimensions
-ggsave("visualizations/jitterplot.png", width = 8, height = 6, dpi = 300)
+ggsave(here("visualizations", "jitterplot.png", width = 8, height = 6, dpi = 300))
 
 ```
 
@@ -268,7 +268,7 @@ ggplot(data = bubble_data,
 #| label: saving-bubble-plot
 
 # code to save image bubbleplot as a png with specified dimensions
-ggsave("visualizations/bubbleplot.png", width = 8, height = 6, dpi = 300)
+ggsave(here("visualizations", "bubbleplot.png", width = 8, height = 6, dpi = 300))
 
 ```
 
@@ -323,12 +323,12 @@ ggplot(data = my_data_clean,
 #| warning: false
 
 # code to save ridgeline plot as png with specified dimensions
-ggsave("visualizations/ridgelineplot.png", width = 8, height = 6, dpi = 300)
+ggsave(here("visualizations", "ridgelineplot.png", width = 8, height = 6, dpi = 300))
 
 ```
 
 
-## Bonus: Visualization 4: Pie chart -- showing how many days I had a sinus infection for fun 
+## Visualization 4: Pie chart -- showing how many days I had a sinus infection for fun 
 
 **Note:** I was honestly shocked at how having a sinus infection greatly affected the amount of water I drink compared to some of the other variables. I think emphasizing this in the infographic would be a fun and personal way to integrate this important variable into my statistical story. 
 
@@ -418,7 +418,7 @@ ggplot(data = sick_counts,
 #| label: saving-pie-chart
 
 # code to save pie chart as png with specified dimensions
-ggsave("visualizations/piechart.png", width = 8, height = 6, dpi = 300)
+ggsave(here("visualizations", "piechart.png", width = 8, height = 6, dpi = 300))
 
 ```
 
