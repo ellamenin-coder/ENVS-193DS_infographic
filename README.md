@@ -33,6 +33,6 @@ There is a 'visualizations' folder in which all of my figures are stored.
 ## Rendered PDFs
 
 The rendered PDF for the visualization making process and written components
-can be found here: [click here](https://github.com/ellamenin-coder/ENVS-193DS_infographic/blob/main/ENVS-193DS_Infographic_Visualizations.pdf)
+can be found here: [click here](https://github.com/ellamenin-coder/ENVS-193DS_infographic/blob/main/code/ENVS-193DS_Infographic_Visualizations.pdf)
 
-The PDF for the resulting infographic can be found here: [click here](https://github.com/ellamenin-coder/ENVS-193DS_infographic/blob/main/EM%20ENVS%20193DS%20Infographic.pdf)
+The PDF for the resulting infographic can be found here: [click here](https://github.com/ellamenin-coder/ENVS-193DS_infographic/blob/main/visualizations/EM%20ENVS%20193DS%20Infographic.pdf)
